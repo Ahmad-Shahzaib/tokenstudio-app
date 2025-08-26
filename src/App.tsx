@@ -4,7 +4,6 @@ import { WalletProvider } from './contexts/WalletContext';
 import Navbar from './components/Navbar';
 import TokenGenerator from './pages/TokenGenerator';
 import About from './pages/About';
-import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 // import Footer from './components/Footer';
 
