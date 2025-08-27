@@ -72,7 +72,7 @@ export default function eTokenGenerator() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdTokenData, setCreatedTokenData] = useState<CreatedToken | null>(null);
 
-  const PLATFORM_FEE = 0.03; // Platform fee
+  const PLATFORM_FEE = 0.08; // Platform fee
   const ADDITIONAL_FEE = 0.03; // Covers rent and transaction fees
   // const PLATFORM_WALLET = new PublicKey('AkMRfs337Vy5i6fDw18EETTXZmm69p9V4ZLSKjXtbTRL');
   // real platfrom address
@@ -1231,7 +1231,7 @@ export default function eTokenGenerator() {
   return (
     <>
       <SEO
-        title="Instant Solana Token Generator | SolSmint"
+        title="Solana Token Builder | TokenStudio"
         description="Create your own Solana SPL token in seconds. No coding required. Free and easy token creation on Solana blockchain."
       />
 
@@ -1469,7 +1469,7 @@ export default function eTokenGenerator() {
                       ) : (
                         <button
                           onClick={nextStep}
-                          className="flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                          className="flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-[#10B981] to-[#A3E635] text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                         >
                           <span>Continue</span>
                           <ChevronRight className="w-5 h-5" />
@@ -1482,9 +1482,12 @@ export default function eTokenGenerator() {
 
               {/* Wallet Connection Overlay */}
               {!connected && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="p-12 bg-black/60 backdrop-blur-xl border border-gray-700/50 rounded-3xl text-center shadow-2xl">
-                    <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg">
+                <div className="absolute inset-0 flex items-center justify-center ">
+                  <div
+                    style={{ background: "transparent", backdropFilter: 'blur(12px)' }}
+                    className="p-12  border border-gray-700/50 rounded-3xl text-center shadow-2xl">
+
+                    <div className="w-24 h-24 bg-gradient-to-r from-[#10B981] to-[#A3E635] rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg">
                       <Wallet className="w-12 h-12 text-white" />
                     </div>
                     <h2 className="text-3xl font-bold text-white mb-4">Connect Wallet</h2>

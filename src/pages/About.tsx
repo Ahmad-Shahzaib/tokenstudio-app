@@ -5,11 +5,9 @@ import {
   ArrowRight
   , CheckCircle
 } from 'lucide-react';
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6"; // for X (Twitter)
 
-import ProcessSection from './ProcessSection';
-import Stats from './Stats';
-import TestimonialsMarquee from './TestimonialsMarquee';
-import FAQ from './FAQ';
 import bg from '../assets/bg.webp';
 import btc from '../assets/bitc.webp';
 import brain from '../assets/brain.webp';
@@ -20,16 +18,16 @@ import { Button } from '../pages/Button';
 
 const About: React.FC = () => {
 
-
+  const currentYear = new Date().getFullYear();
 
   // Platform fee information
-  const platformFee = 0.03;
+  const platformFee = 0.08;
   const networkFee = 0.02;
   const totalFee = platformFee + networkFee;
 
   const stats = [
     { value: "1,247", label: "Tokens Created", suffix: "+" },
-    { value: "0.08", label: "SOL to Start", suffix: "" },
+    { value: "0.1", label: "SOL to Start", suffix: "" },
     { value: "99.9", label: "Uptime", suffix: "%" },
     { value: "24/7", label: "Support", suffix: "" }
   ];
@@ -98,7 +96,7 @@ const About: React.FC = () => {
   return (
     <>
       <SEO
-        title="Solana Token Generator | SolSmint"
+        title="Solana Token Builder | TokenStudio"
         description="Create your own Solana SPL token in seconds. No coding required. Free and easy token creation on Solana blockchain."
       />
       <div className="min-h-screen overflow-hidden">
@@ -119,7 +117,7 @@ const About: React.FC = () => {
             <img
               src={btc}
               alt=""
-              className="w-full h-full object-contain opacity-60"
+              className="w-full h-full object-contain rounded-full opacity-60"
             />
           </div>
 
@@ -127,7 +125,7 @@ const About: React.FC = () => {
             <img
               src={brain}
               alt=""
-              className="w-full h-full object-contain opacity-60"
+              className="w-full h-full object-contain rounded-full opacity-60"
             />
           </div>
 
@@ -135,7 +133,7 @@ const About: React.FC = () => {
             <img
               src={brain}
               alt=""
-              className="w-full h-full object-contain opacity-40"
+              className="w-full h-full object-contain rounded-full opacity-40"
             />
           </div>
 
@@ -179,7 +177,7 @@ const About: React.FC = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
               <div className="text-center">
-                <div className="text-4xl font-bold text-lime-400">0.08</div>
+                <div className="text-4xl font-bold text-lime-400">0.1</div>
                 <div className="text-gray-400">SOL to start</div>
               </div>
               <div className="text-center">
@@ -401,44 +399,40 @@ const About: React.FC = () => {
                 <p className="text-gray-400 text-lg leading-relaxed max-w-md">
                   The future of token creation. No code required, just pure innovation on Solana.
                 </p>
-                <div className="flex space-x-4 mt-6">
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 hover:text-black transition-colors cursor-pointer">
-                    <span className="text-sm font-bold">𝕏</span>
-                  </div>
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 hover:text-black transition-colors cursor-pointer">
-                    <span className="text-sm font-bold">DC</span>
-                  </div>
-                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-lime-400 hover:text-black transition-colors cursor-pointer">
-                    <span className="text-sm font-bold">TG</span>
-                  </div>
-                </div>
               </div>
 
               {/* Links */}
               <div>
                 <h4 className="text-white font-bold text-lg mb-4">Platform</h4>
                 <ul className="space-y-3">
-                  <li><a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">Create Token</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">Documentation</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">API</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">Status</a></li>
+                  <li>
+                    <a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">
+                      Create Token
+                    </a>
+                  </li>
                 </ul>
               </div>
 
+              {/* Social */}
               <div>
-                <h4 className="text-white font-bold text-lg mb-4">Support</h4>
-                <ul className="space-y-3">
-                  <li><a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">Help Center</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">Community</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">Contact</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">Terms</a></li>
-                </ul>
+                <h4 className="text-white font-bold text-lg mb-4">Social</h4>
+                <div className="flex space-x-4">
+                  <a href="https://www.facebook.com/profile.php?id=61579884360872" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-lime-400 transition-colors text-xl">
+                    <FaFacebookF />
+                  </a>
+                  <a href="https://x.com/token_studi0?t=_H2LpfGuT60HJ9iqbRyaVw&s=09" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-lime-400 transition-colors text-xl">
+                    <FaXTwitter />
+                  </a>
+                  <a href="https://www.instagram.com/token_studi0/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-lime-400 transition-colors text-xl">
+                    <FaInstagram />
+                  </a>
+                </div>
               </div>
             </div>
 
             <div className="border-t border-gray-800 mt-12 pt-8 text-center">
               <p className="text-gray-500">
-                © 2024 TokenStudio. Built on Solana with ❤️
+                © {currentYear} TokenStudio. Built on Solana with ❤️
               </p>
             </div>
           </div>

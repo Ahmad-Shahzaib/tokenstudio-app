@@ -93,7 +93,7 @@ const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <img src="logo.png" alt="logo" width={200} />
+              <img src="token.png" alt="token" width={200} />
             </Link>
           </div>
 
@@ -288,7 +288,7 @@ const Navbar: React.FC = () => {
                 }`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              About
+              Token Creator
             </Link>
             {/* <Link
               to="/dashboard"
