@@ -158,20 +158,21 @@ const About: React.FC = () => {
 
             {/* Creative CTA Section */}
             <div className="flex flex-col md:flex-row gap-6 justify-center items-center mb-12">
-              <Button
+              <Link
+                to="/create"
                 size="lg"
                 className="bg-gradient-to-r from-lime-400 to-green-500 text-black font-bold text-xl px-12 py-6 rounded-full hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-lime-400/25"
               >
                 Launch Your Token
-              </Button>
+              </Link>
 
-              <Button
+              <Link
                 variant="outline"
                 size="lg"
                 className="border-2 border-lime-400 text-lime-400 font-bold text-xl px-12 py-6 rounded-full hover:bg-lime-400 hover:text-black transition-all duration-300"
               >
                 See Demo
-              </Button>
+              </Link>
             </div>
 
             {/* Stats */}
@@ -315,9 +316,11 @@ const About: React.FC = () => {
 
             {/* Bottom CTA */}
             <div className="text-center mt-20">
-              <div className="inline-block bg-gradient-to-r from-lime-400 to-green-500 text-black font-bold text-2xl px-16 py-6 rounded-full hover:scale-105 transition-all duration-300 cursor-pointer shadow-2xl hover:shadow-lime-400/25">
+              <Link
+                to="/create"
+                className="inline-block bg-gradient-to-r from-lime-400 to-green-500 text-black font-bold text-2xl px-16 py-6 rounded-full hover:scale-105 transition-all duration-300 cursor-pointer shadow-2xl hover:shadow-lime-400/25">
                 Start Creating Now
-              </div>
+              </Link>
             </div>
           </div>
         </section>
@@ -374,10 +377,12 @@ const About: React.FC = () => {
             {/* Community CTA */}
             <div className="text-center mt-20">
               <div className="inline-block">
-                <h3 className="text-4xl font-bold text-white mb-4">Ready to join them?</h3>
-                <div className="bg-gradient-to-r from-lime-400 to-green-500 text-black font-bold text-xl px-12 py-4 rounded-full hover:scale-105 transition-all duration-300 cursor-pointer">
+                <h3 className="text-4xl font-bold text-white mb-8">Ready to join them?</h3>
+                <Link
+                  to={"/create"}
+                  className="bg-gradient-to-r from-lime-400 to-green-500 text-black font-bold text-xl px-12 py-4 rounded-full hover:scale-105 transition-all duration-300 cursor-pointer">
                   Create Your Token
-                </div>
+                </Link>
               </div>
             </div>
           </div>
@@ -406,7 +411,7 @@ const About: React.FC = () => {
                 <h4 className="text-white font-bold text-lg mb-4">Platform</h4>
                 <ul className="space-y-3">
                   <li>
-                    <a href="#" className="text-gray-400 hover:text-lime-400 transition-colors">
+                    <a href="/create" className="text-gray-400 hover:text-lime-400 transition-colors">
                       Create Token
                     </a>
                   </li>
