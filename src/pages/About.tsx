@@ -394,12 +394,11 @@ const About: React.FC = () => {
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-4 gap-12">
               {/* Brand */}
-              <div className="md:col-span-2">
-                <div className="flex items-center space-x-2 mb-6">
-                  <div className="w-10 h-10 bg-gradient-to-r from-lime-400 to-green-500 rounded-lg flex items-center justify-center">
-                    <span className="text-black font-black text-xl">T</span>
-                  </div>
-                  <span className="text-2xl font-black text-white">TokenStudio</span>
+              <div className="md:col-span-2 ">
+                <div className="flex items-center">
+                  <Link to="/" className="flex items-center space-x-2 mb-5">
+                    <img src="token.png" alt="token" width={200} />
+                  </Link>
                 </div>
                 <p className="text-gray-400 text-lg leading-relaxed max-w-md">
                   The future of token creation. No code required, just pure innovation on Solana.
