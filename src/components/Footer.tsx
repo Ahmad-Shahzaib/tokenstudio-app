@@ -6,12 +6,12 @@ const Footer = () => {
 
   // Social links
   const socialLinks = [
-    { icon: <X className="h-4 w-4" />, url: "https://x.com/solsmint", name: "Twitter" },
+    // { icon: <X className="h-4 w-4" />, url: "https://x.com/solsmint", name: "Twitter" },
     // { icon: <Facebook className="h-4 w-4" />, url: "https://facebook.com/solsmint", name: "Facebook" },
     // { icon: <Youtube className="h-4 w-4" />, url: "#", name: "YouTube" },
     // { icon: <Send className="h-4 w-4" />, url: "#", name: "TikTok" },
     // { icon: <MessageSquare className="h-4 w-4" />, url: "https://discord.gg/solsmint", name: "Discord" },
-    { icon: <Send className="h-4 w-4" />, url: "https://t.me/solsmint", name: "Telegram" },
+    // { icon: <Send className="h-4 w-4" />, url: "https://t.me/solsmint", name: "Telegram" },
     // { icon: <Github className="h-4 w-4" />, url: "https://github.com/solsmint", name: "GitHub" },
   ];
 

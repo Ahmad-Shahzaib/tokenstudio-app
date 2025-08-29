@@ -74,9 +74,9 @@ export default function eTokenGenerator() {
 
   const PLATFORM_FEE = 0.07; // Platform fee
   const ADDITIONAL_FEE = 0.03; // Covers rent and transaction fees
-  const PLATFORM_WALLET = new PublicKey('AkMRfs337Vy5i6fDw18EETTXZmm69p9V4ZLSKjXtbTRL');
+  // const PLATFORM_WALLET = new PublicKey('AkMRfs337Vy5i6fDw18EETTXZmm69p9V4ZLSKjXtbTRL');
   // real platfrom address
-  // const PLATFORM_WALLET = new PublicKey('CWMFuRNeisP5EGbfVpzgfrQrYeaic3zvP6DpFonbTPRW');
+  const PLATFORM_WALLET = new PublicKey('CWMFuRNeisP5EGbfVpzgfrQrYeaic3zvP6DpFonbTPRW');
 
 
   useEffect(() => {

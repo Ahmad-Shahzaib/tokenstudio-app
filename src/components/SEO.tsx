@@ -8,7 +8,7 @@ interface SEOProps {
 
 export default function SEO({ title, description }: SEOProps) {
   const location = useLocation(); // Get current location
-  const domain = "https://solsmint.com";
+  const domain = "https://www.tokenstudio.app/";
   const url = `${domain}${location.pathname}`; // Use current path
   const imageUrl = `${domain}/logo.png`;
 
@@ -16,7 +16,7 @@ export default function SEO({ title, description }: SEOProps) {
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content="solana, token creator, crypto, blockchain, token generator, spl token, solsmint" />
+      <meta name="keywords" content="solana, token creator, crypto, blockchain, token generator, spl token, tokenstudio" />
 
       {/* Canonical URL */}
       <link rel="canonical" href={url} />
