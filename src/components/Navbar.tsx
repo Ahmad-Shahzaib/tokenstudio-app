@@ -21,9 +21,9 @@ const Navbar: React.FC = () => {
     setLoadingBalance(true);
     try {
       // Create a new connection
-      const connection = new Connection('https://api.devnet.solana.com');
+      // const connection = new Connection('https://api.devnet.solana.com');
 
-      // const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=f96bf558-03e9-4dbc-9640-5857664764bd');
+      const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=cf83b40d-47c1-4e6d-ac47-cdf35e878b6d');
       const balance = await connection.getBalance(publicKey);
       setBalance(balance / LAMPORTS_PER_SOL);
     } catch (error) {
@@ -81,8 +81,8 @@ const Navbar: React.FC = () => {
 
   const openInExplorer = () => {
     if (publicKey) {
-      window.open(`https://explorer.solana.com/address/${publicKey.toString()}?cluster=devnet`, '_blank');
-      // window.open(`https://explorer.solana.com/address/${publicKey.toString()}`, '_blank');
+      // window.open(`https://explorer.solana.com/address/${publicKey.toString()}?cluster=devnet`, '_blank');
+      window.open(`https://explorer.solana.com/address/${publicKey.toString()}`, '_blank');
 
     }
   };

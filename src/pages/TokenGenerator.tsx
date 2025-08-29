@@ -145,6 +145,9 @@ export default function eTokenGenerator() {
     switch (step) {
       case 'basic':
         return !!(formData.name && formData.symbol && formData.supply > 0);
+      case 'details':
+        return !!formData.imageFile; // Require image upload for details step
+
       default:
         return true;
     }
@@ -152,7 +155,11 @@ export default function eTokenGenerator() {
 
   const nextStep = () => {
     if (!validateStep(currentStep)) {
-      setError('Please fill in all required fields');
+      if (currentStep === 'details' && !formData.imageFile) {
+        setError('Please upload a token logo image before continuing.');
+      } else {
+        setError('Please fill in all required fields');
+      }
       return;
     }
     setError('');
@@ -184,8 +191,8 @@ export default function eTokenGenerator() {
     setCurrentStep('creation');
 
     try {
-      const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
-      // const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=cf83b40d-47c1-4e6d-ac47-cdf35e878b6d', 'confirmed');
+      // const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+      const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=cf83b40d-47c1-4e6d-ac47-cdf35e878b6d', 'confirmed');
 
       const balance = await connection.getBalance(publicKey);
       const requiredBalance = (PLATFORM_FEE + ADDITIONAL_FEE) * LAMPORTS_PER_SOL;
@@ -487,9 +494,7 @@ export default function eTokenGenerator() {
                   </div>
 
                   {/* Status Indicator */}
-                  <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl px-4 py-2">
-                    <span className="text-blue-400 text-sm font-medium">Step 1 of 5</span>
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -748,6 +753,7 @@ export default function eTokenGenerator() {
                   {!imagePreview ? (
                     <div className="relative group">
                       <input
+                        required
                         type="file"
                         accept="image/*"
                         onChange={handleImageUpload}
@@ -853,262 +859,274 @@ export default function eTokenGenerator() {
 
       case 'social':
         return (
-          <div className="space-y-12">
+          <div className="space-y-10">
             {/* Header */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-tr from-pink-500 via-purple-600 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-500/30">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-indigo-500/40">
                 <Globe className="w-10 h-10 text-white" />
               </div>
-              <h2 className="text-4xl font-extrabold tracking-tight text-white mb-3">
+              <h2 className="text-3xl font-bold tracking-tight text-white mb-2">
                 Social Presence
               </h2>
-              <p className="text-gray-400 text-lg max-w-xl mx-auto">
+              <p className="text-gray-400 text-base max-w-md mx-auto">
                 Build trust and connect your community across platforms.
               </p>
             </div>
 
             {/* Form Fields */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Website */}
-              <div>
-                <label className="flex items-center space-x-2 text-sm font-medium text-gray-300 mb-2">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:border-blue-500/40 transition">
+                <label className="flex items-center space-x-2 text-sm font-medium text-gray-200 mb-3">
                   <Globe className="w-4 h-4 text-blue-400" />
                   <span>Website URL</span>
                 </label>
-                <div className="relative">
-                  <input
-                    type="url"
-                    name="website"
-                    value={formData.website || ""}
-                    onChange={handleInputChange}
-                    placeholder="https://yourproject.com"
-                    className="w-full px-5 py-3.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/40 transition-all duration-300"
-                  />
-                  <span className="absolute -bottom-2 left-2 w-1/4 h-[2px] bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-focus-within:opacity-100 transition-opacity"></span>
-                </div>
+                <input
+                  type="url"
+                  name="website"
+                  value={formData.website || ""}
+                  onChange={handleInputChange}
+                  placeholder="https://yourproject.com"
+                  className="w-full px-4 py-3 bg-transparent border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition"
+                />
               </div>
 
               {/* Telegram */}
-              <div>
-                <label className="flex items-center space-x-2 text-sm font-medium text-gray-300 mb-2">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:border-cyan-500/40 transition">
+                <label className="flex items-center space-x-2 text-sm font-medium text-gray-200 mb-3">
                   <MessageCircle className="w-4 h-4 text-cyan-400" />
                   <span>Telegram</span>
                 </label>
-                <div className="relative">
-                  <input
-                    type="url"
-                    name="telegram"
-                    value={formData.telegram || ""}
-                    onChange={handleInputChange}
-                    placeholder="https://t.me/yourgroup"
-                    className="w-full px-5 py-3.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/40 transition-all duration-300"
-                  />
-                </div>
+                <input
+                  type="url"
+                  name="telegram"
+                  value={formData.telegram || ""}
+                  onChange={handleInputChange}
+                  placeholder="https://t.me/yourgroup"
+                  className="w-full px-4 py-3 bg-transparent border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/30 transition"
+                />
               </div>
 
               {/* Twitter */}
-              <div>
-                <label className="flex items-center space-x-2 text-sm font-medium text-gray-300 mb-2">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:border-sky-500/40 transition">
+                <label className="flex items-center space-x-2 text-sm font-medium text-gray-200 mb-3">
                   <Twitter className="w-4 h-4 text-sky-400" />
                   <span>Twitter/X</span>
                 </label>
-                <div className="relative">
-                  <input
-                    type="url"
-                    name="twitter"
-                    value={formData.twitter || ""}
-                    onChange={handleInputChange}
-                    placeholder="https://twitter.com/yourproject"
-                    className="w-full px-5 py-3.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/40 transition-all duration-300"
-                  />
-                </div>
+                <input
+                  type="url"
+                  name="twitter"
+                  value={formData.twitter || ""}
+                  onChange={handleInputChange}
+                  placeholder="https://twitter.com/yourproject"
+                  className="w-full px-4 py-3 bg-transparent border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/30 transition"
+                />
               </div>
 
               {/* Discord */}
-              <div>
-                <label className="flex items-center space-x-2 text-sm font-medium text-gray-300 mb-2">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-5 hover:border-purple-500/40 transition">
+                <label className="flex items-center space-x-2 text-sm font-medium text-gray-200 mb-3">
                   <Hash className="w-4 h-4 text-purple-400" />
                   <span>Discord</span>
                 </label>
-                <div className="relative">
-                  <input
-                    type="url"
-                    name="discord"
-                    value={formData.discord || ""}
-                    onChange={handleInputChange}
-                    placeholder="https://discord.gg/yourserver"
-                    className="w-full px-5 py-3.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/40 transition-all duration-300"
-                  />
-                </div>
+                <input
+                  type="url"
+                  name="discord"
+                  value={formData.discord || ""}
+                  onChange={handleInputChange}
+                  placeholder="https://discord.gg/yourserver"
+                  className="w-full px-4 py-3 bg-transparent border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30 transition"
+                />
               </div>
             </div>
 
             {/* Community Trust Box */}
-            <div className="p-6 rounded-xl border border-white/10 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 backdrop-blur-md">
+            <div className="p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-indigo-500/10 backdrop-blur-md hover:shadow-xl hover:shadow-indigo-500/20 transition">
               <div className="flex items-center space-x-3 mb-3">
-                <Shield className="w-6 h-6 text-blue-400" />
+                <Shield className="w-6 h-6 text-indigo-400" />
                 <h3 className="text-lg font-semibold text-white">Community Trust</h3>
               </div>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Social links help establish credibility and allow your community to
-                connect with your project across multiple platforms.
+                Social links help establish credibility and allow your community to connect with your project across multiple platforms.
               </p>
             </div>
           </div>
+
 
         );
 
       case 'review':
         return (
           <div className="space-y-8">
+            {/* Header */}
             <div className="text-center mb-12">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/25">
+              <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-purple-500/30">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-white via-green-200 to-emerald-200 bg-clip-text text-transparent mb-4">
-                Final Review
+              <h2 className="text-4xl font-extrabold bg-gradient-to-r from-white via-indigo-200 to-pink-200 bg-clip-text text-transparent mb-4">
+                Deployment Overview
               </h2>
-              <p className="text-gray-400 text-lg">Verify all details before deploying to blockchain</p>
+              <p className="text-gray-400 text-lg">
+                Double-check your details before finalizing deployment on blockchain.
+              </p>
             </div>
 
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-3xl p-8 border border-gray-700/50 backdrop-blur-sm">
+            {/* Token Details */}
+            <div className="bg-gradient-to-br from-gray-900/40 to-gray-800/40 rounded-3xl p-8 border border-gray-700/40 backdrop-blur-md">
               <div className="flex items-start space-x-6 mb-8">
                 {imagePreview ? (
-                  <img src={imagePreview} alt={formData.name} className="w-24 h-24 rounded-2xl object-cover shadow-lg" />
+                  <img
+                    src={imagePreview}
+                    alt={formData.name}
+                    className="w-24 h-24 rounded-2xl object-cover shadow-lg"
+                  />
                 ) : (
                   <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-2xl">{formData.symbol.charAt(0)}</span>
+                    <span className="text-white font-bold text-2xl">
+                      {formData.symbol.charAt(0)}
+                    </span>
                   </div>
                 )}
                 <div className="flex-1">
-                  <h3 className="text-3xl font-bold text-white mb-2">{formData.name}</h3>
+                  <h3 className="text-3xl font-bold text-white mb-2">
+                    {formData.name}
+                  </h3>
                   <p className="text-gray-400 text-lg mb-4">{formData.symbol}</p>
                   {formData.description && (
-                    <p className="text-gray-300 leading-relaxed">{formData.description}</p>
+                    <p className="text-gray-300 leading-relaxed">
+                      {formData.description}
+                    </p>
                   )}
                 </div>
               </div>
 
+              {/* Supply Info */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="text-center p-4 bg-black/20 rounded-xl border border-gray-700/50">
-                  <div className="text-2xl font-bold text-white">{formData.supply.toLocaleString()}</div>
+                <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-white">
+                    {formData.supply.toLocaleString()}
+                  </div>
                   <div className="text-sm text-gray-400">Total Supply</div>
                 </div>
-                <div className="text-center p-4 bg-black/20 rounded-xl border border-gray-700/50">
-                  <div className="text-2xl font-bold text-white">{formData.decimals}</div>
+                <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-white">
+                    {formData.decimals}
+                  </div>
                   <div className="text-sm text-gray-400">Decimals</div>
                 </div>
-                <div className="text-center p-4 bg-black/20 rounded-xl border border-gray-700/50">
-                  <div className="text-2xl font-bold text-green-400">{formData.mintAuthority ? 'YES' : 'NO'}</div>
+                <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-indigo-400">
+                    {formData.mintAuthority ? "Enabled" : "Disabled"}
+                  </div>
                   <div className="text-sm text-gray-400">Mint Authority</div>
                 </div>
-                <div className="text-center p-4 bg-black/20 rounded-xl border border-gray-700/50">
-                  <div className="text-2xl font-bold text-green-400">{formData.freezeAuthority ? 'YES' : 'NO'}</div>
+                <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-indigo-400">
+                    {formData.freezeAuthority ? "Enabled" : "Disabled"}
+                  </div>
                   <div className="text-sm text-gray-400">Freeze Authority</div>
                 </div>
               </div>
 
-              {(formData.website || formData.telegram || formData.twitter || formData.discord) && (
-                <div className="mb-8">
-                  <h4 className="text-lg font-semibold text-white mb-4">Social Links</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {formData.website && (
-                      <div className="flex items-center space-x-3 p-3 bg-black/20 rounded-xl border border-gray-700/50">
-                        <Globe className="w-5 h-5 text-blue-400" />
-                        <span className="text-white text-sm truncate">{formData.website}</span>
-                      </div>
-                    )}
-                    {formData.telegram && (
-                      <div className="flex items-center space-x-3 p-3 bg-black/20 rounded-xl border border-gray-700/50">
-                        <MessageCircle className="w-5 h-5 text-cyan-400" />
-                        <span className="text-white text-sm truncate">{formData.telegram}</span>
-                      </div>
-                    )}
-                    {formData.twitter && (
-                      <div className="flex items-center space-x-3 p-3 bg-black/20 rounded-xl border border-gray-700/50">
-                        <Twitter className="w-5 h-5 text-blue-400" />
-                        <span className="text-white text-sm truncate">{formData.twitter}</span>
-                      </div>
-                    )}
-                    {formData.discord && (
-                      <div className="flex items-center space-x-3 p-3 bg-black/20 rounded-xl border border-gray-700/50">
-                        <Hash className="w-5 h-5 text-purple-400" />
-                        <span className="text-white text-sm truncate">{formData.discord}</span>
-                      </div>
-                    )}
+              {/* Social Links */}
+              {(formData.website ||
+                formData.telegram ||
+                formData.twitter ||
+                formData.discord) && (
+                  <div className="mb-8">
+                    <h4 className="text-lg font-semibold text-white mb-4">
+                      Connected Platforms
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {formData.website && (
+                        <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                          <Globe className="w-5 h-5 text-blue-400" />
+                          <span className="text-white text-sm truncate">
+                            {formData.website}
+                          </span>
+                        </div>
+                      )}
+                      {formData.telegram && (
+                        <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                          <MessageCircle className="w-5 h-5 text-cyan-400" />
+                          <span className="text-white text-sm truncate">
+                            {formData.telegram}
+                          </span>
+                        </div>
+                      )}
+                      {formData.twitter && (
+                        <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                          <Twitter className="w-5 h-5 text-sky-400" />
+                          <span className="text-white text-sm truncate">
+                            {formData.twitter}
+                          </span>
+                        </div>
+                      )}
+                      {formData.discord && (
+                        <div className="flex items-center space-x-3 p-3 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm">
+                          <Hash className="w-5 h-5 text-purple-400" />
+                          <span className="text-white text-sm truncate">
+                            {formData.discord}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-purple-500/10 to-cyan-500/10 p-6 rounded-2xl border border-purple-500/20">
+            {/* Fee & IPFS Info */}
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+              {/* Platform Fee */}
+              <div className=" bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-6 rounded-2xl border border-purple-500/20">
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
                     <Coins className="w-5 h-5 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Platform Fee</h3>
+                  <h3 className="text-lg font-semibold text-white">Deployment Fees</h3>
                 </div>
-                <p className="text-gray-300 mb-4">One-time creation fee charged to your wallet</p>
+                <p className="text-gray-300 mb-4">
+                  Required one-time cost to initialize your token.
+                </p>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400">Platform Fee:</span>
-                  {/* <span className="text-2xl font-bold text-purple-400">{PLATFORM_FEE} SOL</span> */}
                   <span className="text-2xl font-bold text-purple-400">0.07 SOL</span>
                 </div>
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-gray-400">Network Fees:</span>
-                  {/* <span className="text-lg font-semibold text-gray-300">~{ADDITIONAL_FEE} SOL</span> */}
+                  <span className="text-gray-400">Estimated Gas:</span>
                   <span className="text-lg font-semibold text-gray-300">~0.03 SOL</span>
-
                 </div>
               </div>
 
-              <div className={`bg-gradient-to-br ${pinataAvailable ? 'from-green-500/10 to-emerald-500/10' : 'from-yellow-500/10 to-amber-500/10'} p-6 rounded-2xl border ${pinataAvailable ? 'border-green-500/20' : 'border-yellow-500/20'}`}>
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${pinataAvailable ? 'bg-gradient-to-r from-green-500 to-emerald-500' : 'bg-gradient-to-r from-yellow-500 to-amber-500'}`}>
-                    <Shield className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className={`text-lg font-semibold ${pinataAvailable ? 'text-white' : 'text-yellow-400'}`}>IPFS Status</h3>
-                </div>
-                <p className="text-gray-300 mb-4">{pinataAvailable ? 'Secure storage available' : 'Service limited'}</p>
-                <div className="flex items-center space-x-2">
-                  <div className={`w-3 h-3 rounded-full ${pinataAvailable ? 'bg-green-500 animate-pulse' : 'bg-yellow-500'}`}></div>
-                  <span className={`${pinataAvailable ? 'text-green-400' : 'text-yellow-400'} font-medium`}>
-                    {pinataAvailable ? 'Pinata IPFS ready' : 'Pinata service unavailable'}
-                  </span>
-                </div>
-              </div>
+              {/* IPFS Status */}
+
             </div>
           </div>
+
         );
 
       case 'creation':
         return (
-          <div className="space-y-8">
-            <div className="text-center mb-12">
-              <div className="relative">
-                <div className="w-24 h-24 bg-gradient-to-br from-purple-500 via-cyan-500 to-green-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-purple-500/25">
-                  <Cpu className="w-12 h-12 text-white" />
-                </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center animate-pulse">
-                  <Activity className="w-4 h-4 text-white" />
-                </div>
-              </div>
-              <h2 className="text-4xl font-bold bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent mb-4">
-                Deploying Token
+          <div className="space-y-10">
+            {/* Header Section */}
+            <div className="text-center mb-12 relative">
+
+              <h2 className="text-5xl font-extrabold bg-gradient-to-r from-white via-purple-300 to-cyan-300 bg-clip-text text-transparent mb-8 tracking-wide">
+                Deploying Your Token
               </h2>
-              <p className="text-gray-400 text-lg">Processing blockchain transactions...</p>
+              <p className="text-gray-400 text-lg">Finalizing smart contract & blockchain setup...</p>
             </div>
 
+            {/* Steps Section */}
             <div className="space-y-6">
               {[
-                { step: 'payment', title: 'Payment Processing', desc: 'Charging platform fee from wallet', color: 'purple' },
-                { step: 'upload', title: 'IPFS Upload', desc: 'Uploading metadata to decentralized storage', color: 'orange' },
-                { step: 'creation', title: 'Token Creation', desc: 'Creating token mint on Solana blockchain', color: 'cyan' },
-                { step: 'metadata', title: 'Metadata Integration', desc: 'Linking token metadata and assets', color: 'pink' },
-                { step: 'minting', title: 'Token Minting', desc: 'Minting initial supply to your wallet', color: 'green' },
-                { step: 'revoking', title: 'Revoking Authorities', desc: 'Removing token controls as requested', color: 'yellow' },
-                { step: 'complete', title: 'Deployment Complete', desc: 'Token successfully deployed and ready', color: 'emerald' }
+                { step: 'payment', title: 'Processing Payment', desc: 'Confirming platform fee transaction', color: 'purple' },
+                { step: 'upload', title: 'Decentralized Storage', desc: 'Uploading metadata securely to IPFS', color: 'orange' },
+                { step: 'creation', title: 'Token Mint Creation', desc: 'Initializing token on Solana blockchain', color: 'cyan' },
+                { step: 'metadata', title: 'Metadata Binding', desc: 'Attaching token metadata and assets', color: 'pink' },
+                { step: 'minting', title: 'Supply Minting', desc: 'Minting initial supply into your wallet', color: 'green' },
+                { step: 'revoking', title: 'Authority Revocation', desc: 'Disabling mint & freeze authorities', color: 'yellow' },
+                { step: 'complete', title: 'Deployment Finished', desc: 'Token successfully launched', color: 'emerald' }
               ].map(({ step, title, desc, color }) => {
                 const status = getStepStatus(step);
                 const isActive = status === 'active';
@@ -1116,29 +1134,23 @@ export default function eTokenGenerator() {
                 const isError = status === 'error';
 
                 return (
-                  <div key={step} className={`relative overflow-hidden rounded-2xl border transition-all duration-500 ${isActive ? `border-${color}-500/50 bg-gradient-to-r from-${color}-500/20 to-transparent shadow-lg shadow-${color}-500/20` :
-                    isComplete ? 'border-green-500/50 bg-gradient-to-r from-green-500/20 to-transparent' :
-                      isError ? 'border-red-500/50 bg-gradient-to-r from-red-500/20 to-transparent' :
-                        'border-gray-700/50 bg-black/20'
-                    }`}>
-                    <div className="flex items-center p-6 space-x-4">
-                      <div className={`relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 ${isActive ? `bg-gradient-to-r ${getStepColor(step)} shadow-lg` :
-                        isComplete ? 'bg-gradient-to-r from-green-500 to-emerald-600' :
-                          isError ? 'bg-gradient-to-r from-red-500 to-red-600' :
-                            'bg-gray-700'
-                        }`}>
-                        {isActive && (
-                          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl animate-pulse"></div>
-                        )}
-                        {isError ? (
-                          <AlertCircle className="w-6 h-6 text-white" />
-                        ) : isActive ? (
-                          <Loader className="w-6 h-6 text-white animate-spin" />
-                        ) : (
-                          getStepIcon(step)
-                        )}
-                      </div>
+                  <div
+                    key={step}
+                    className={`relative overflow-hidden rounded-2xl border transition-all duration-500 group 
+            ${isActive
+                        ? `border-${color}-500/50 bg-gradient-to-r from-${color}-600/20 to-black/20 shadow-xl shadow-${color}-500/30`
+                        : isComplete
+                          ? 'border-green-500/40 bg-gradient-to-r from-green-600/20 to-black/20'
+                          : isError
+                            ? 'border-red-500/40 bg-gradient-to-r from-red-600/20 to-black/20'
+                            : 'border-gray-700/50 bg-black/30'
+                      }`}
+                  >
+                    <div className="flex items-center p-6 space-x-5">
+                      {/* Icon */}
 
+
+                      {/* Step Text */}
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
                         <p className="text-gray-400 text-sm">{desc}</p>
@@ -1146,7 +1158,7 @@ export default function eTokenGenerator() {
                         {step === 'upload' && isActive && (
                           <div className="mt-3">
                             <div className="flex items-center justify-between mb-2">
-                              <span className="text-xs text-orange-400 font-medium">Uploading...</span>
+                              <span className="text-xs text-orange-400 font-medium">Uploading to IPFS...</span>
                               <span className="text-xs text-orange-400">{uploadProgress}%</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
@@ -1161,12 +1173,15 @@ export default function eTokenGenerator() {
                         )}
                       </div>
 
+                      {/* Status */}
                       <div className="text-right">
                         {isComplete && (
-                          <div className="text-green-400 text-sm font-medium">✓ Complete</div>
+                          <div className="text-green-400 text-sm font-medium">✓ Done</div>
                         )}
                         {isActive && (
-                          <div className={`text-${color}-400 text-sm font-medium animate-pulse`}>Processing...</div>
+                          <div className={`text-${color}-400 text-sm font-medium animate-pulse`}>
+                            Processing...
+                          </div>
                         )}
                         {status === 'pending' && (
                           <div className="text-gray-500 text-sm">Pending</div>
@@ -1176,37 +1191,36 @@ export default function eTokenGenerator() {
                         )}
                       </div>
                     </div>
-
-                    {isActive && (
-                      <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-50 animate-pulse"></div>
-                    )}
                   </div>
                 );
               })}
             </div>
 
+            {/* Success Message */}
             {transactionStep === 'complete' && (
-              <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 p-6 rounded-2xl border border-green-500/20 animate-pulse">
+              <div className="bg-gradient-to-tr from-emerald-500/10 to-green-500/10 p-8 rounded-3xl border border-green-500/30 animate-glow">
                 <div className="text-center">
-                  <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-white mb-2">Token Successfully Created!</h3>
-                  <p className="text-gray-300">Your token is now live on the Solana blockchain</p>
+                  <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4 animate-bounce" />
+                  <h3 className="text-3xl font-bold text-white mb-2">Token Deployed Successfully!</h3>
+                  <p className="text-gray-300">Your token is now live and accessible on the Solana blockchain 🚀</p>
                 </div>
               </div>
             )}
 
+            {/* Error Message */}
             {error && transactionStep === 'error' && (
-              <div className="bg-gradient-to-r from-red-500/10 to-red-600/10 p-6 rounded-2xl border border-red-500/20">
-                <div className="flex items-center space-x-3">
-                  <AlertCircle className="w-8 h-8 text-red-400" />
+              <div className="bg-gradient-to-tr from-red-500/10 to-red-600/10 p-6 rounded-2xl border border-red-500/30">
+                <div className="flex items-center space-x-4">
+                  <AlertCircle className="w-9 h-9 text-red-400" />
                   <div>
-                    <h3 className="text-xl font-bold text-red-400 mb-1">Error Occurred</h3>
+                    <h3 className="text-xl font-bold text-red-400 mb-1">Transaction Failed</h3>
                     <p className="text-red-300">{error}</p>
                   </div>
                 </div>
               </div>
             )}
           </div>
+
         );
 
       default:
@@ -1235,49 +1249,17 @@ export default function eTokenGenerator() {
         description="Create your own Solana SPL token in seconds. No coding required. Free and easy token creation on Solana blockchain."
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className=" ">
         {/* Animated background */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-green-500/5 rounded-full blur-3xl animate-pulse delay-2000"></div>
-        </div>
 
-        <div className="relative pt-24 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            {/* Header */}
-            {/* <div className="text-center mb-16"> */}
-            {/* <div className="flex items-center justify-center mb-8">
-              <div className="relative">
-                <div className="w-32 h-32 bg-gradient-to-br from-purple-500 via-cyan-500 to-green-500 rounded-3xl flex items-center justify-center shadow-2xl shadow-purple-500/25">
-                  <Coins className="w-16 h-16 text-white" />
-                </div>
-                <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg animate-bounce">
-                  <Zap className="w-6 h-6 text-white" />
-                </div>
-              </div>
-            </div> */}
-            {/* <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white via-purple-200 to-cyan-200 bg-clip-text text-transparent mb-6">
-              SolForge
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed">
-              Professional token creation platform for Solana blockchain. Deploy tokens with metadata, social links, and advanced features.
-            </p> */}
-            {/* <div className="flex items-center justify-center space-x-2 mt-6">
-              <div className="px-4 py-2 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-full border border-purple-500/30">
-                <span className="text-purple-400 font-semibold">Fee: {PLATFORM_FEE} SOL + 0.02 transaction fees</span>
-              </div>
-              <div className="px-4 py-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-full border border-green-500/30">
-                <span className="text-green-400 font-semibold">Devnet Ready</span>
-              </div>
-            </div> */}
-            {/* </div> */}
 
+        <div className="relative pt-6 sm:pt-12 px-2 sm:px-4 lg:px-8">
+          <div className=" mx-auto">
             {/* Progress Steps */}
-            <div className="mb-16">
+            <div className="mb-10 sm:mb-16">
               {/* Modern Circular Progress Track */}
-              <div className="relative max-w-5xl mx-auto px-4 mb-8">
-                <div className="flex items-center justify-between">
+              <div className="relative max-w-5xl mx-auto px-0 sm:px-4 mb-8 overflow-x-auto overflow-y-hidden">
+                <div className="flex items-center justify-between sm:justify-between gap-2 sm:gap-0 min-w-[400px] sm:min-w-0">
                   {(['basic', 'details', 'social', 'review', 'creation'] as FormStep[]).map((step, index) => (
                     <React.Fragment key={step}>
                       <div className="relative flex flex-col items-center group">
@@ -1363,10 +1345,9 @@ export default function eTokenGenerator() {
                   ))}
                 </div>
               </div>
-
               {/* Enhanced Status Bar */}
               <div className="max-w-4xl mx-auto">
-                <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-6">
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-2xl border border-slate-700/50 p-4 sm:p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
                       <div className="w-3 h-3 bg-gradient-to-r from-lime-400 via-green-400 to-emerald-400  rounded-full animate-pulse"></div>
@@ -1412,7 +1393,7 @@ export default function eTokenGenerator() {
             {/* Main Content */}
             <div className="relative">
               <div className={`transition-all duration-500 ${!connected ? 'blur-sm' : ''}`}>
-                <div className="bg-black/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-8 lg:p-12 mb-8 shadow-2xl">
+                <div className="bg-black/40 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-4 sm:p-8 lg:p-12 mb-8 shadow-2xl">
                   {renderStepContent()}
 
                   {error && transactionStep !== 'error' && (
@@ -1431,11 +1412,11 @@ export default function eTokenGenerator() {
 
                   {/* Navigation Buttons */}
                   {currentStep !== 'creation' && (
-                    <div className="flex justify-between items-center mt-12">
+                    <div className="flex flex-col sm:flex-row justify-between items-center mt-8 sm:mt-12 gap-4 sm:gap-0">
                       <button
                         onClick={prevStep}
                         disabled={currentStep === 'basic'}
-                        className="flex items-center space-x-3 px-8 py-4 bg-gray-800/50 hover:bg-gray-700/50 disabled:bg-gray-800/20 disabled:cursor-not-allowed text-white font-semibold rounded-2xl transition-all duration-300 border border-gray-700/50 hover:border-gray-600/50"
+                        className="w-full sm:w-auto flex items-center space-x-3 px-6 sm:px-8 py-3 sm:py-4 bg-gray-800/50 hover:bg-gray-700/50 disabled:bg-gray-800/20 disabled:cursor-not-allowed text-white font-semibold rounded-2xl transition-all duration-300 border border-gray-700/50 hover:border-gray-600/50"
                       >
                         <ChevronLeft className="w-5 h-5" />
                         <span>Previous</span>
@@ -1479,14 +1460,13 @@ export default function eTokenGenerator() {
                   )}
                 </div>
               </div>
-
               {/* Wallet Connection Overlay */}
               {!connected && (
                 <div className="absolute inset-0 flex items-center justify-center ">
                   <div
                     style={{ background: "transparent", backdropFilter: 'blur(12px)' }}
-                    className="p-12  border border-gray-700/50 rounded-3xl text-center shadow-2xl">
-
+                    className="w-full max-w-md p-6 sm:p-12 border border-gray-700/50 rounded-3xl text-center shadow-2xl"
+                  >
                     <div className="w-24 h-24 bg-gradient-to-r from-[#10B981] to-[#A3E635] rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-lg">
                       <Wallet className="w-12 h-12 text-white" />
                     </div>
@@ -1502,8 +1482,13 @@ export default function eTokenGenerator() {
 
             {/* Success Modal */}
             {showSuccessModal && createdTokenData && (
-              <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+              <div
+                style={{ background: "transparent", backdropFilter: 'blur(12px)' }}
+                className="fixed inset-0  flex items-center justify-center z-50 p-2 sm:p-4">
+                <div className=" border border-gray-700/50 rounded-3xl p-4 sm:p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+                  style={{ background: "transparent", backdropFilter: 'blur(12px)' }}
+                >
+
                   <div className="text-center mb-8">
                     <div className="w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/25">
                       <CheckCircle className="w-12 h-12 text-white" />
@@ -1553,8 +1538,8 @@ export default function eTokenGenerator() {
                             <Copy className="w-4 h-4 text-gray-400" />
                           </button>
                           <a
-                            href={`https://explorer.solana.com/address/${createdTokenData.mintAddress}?cluster=devnet`}
-                            // href={`https://explorer.solana.com/address/${createdTokenData.mintAddress}`}
+                            // href={`https://explorer.solana.com/address/${createdTokenData.mintAddress}?cluster=devnet`}
+                            href={`https://explorer.solana.com/address/${createdTokenData.mintAddress}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
@@ -1582,8 +1567,8 @@ export default function eTokenGenerator() {
                             <Copy className="w-4 h-4 text-gray-400" />
                           </button>
                           <a
-                            href={`https://explorer.solana.com/tx/${createdTokenData.transactionSignature}?cluster=devnet`}
-                            // href={`https://explorer.solana.com/tx/${createdTokenData.transactionSignature}`}
+                            // href={`https://explorer.solana.com/tx/${createdTokenData.transactionSignature}?cluster=devnet`}
+                            href={`https://explorer.solana.com/tx/${createdTokenData.transactionSignature}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
@@ -1602,53 +1587,20 @@ export default function eTokenGenerator() {
 
                   <div className="flex flex-col sm:flex-row gap-4 mb-8">
                     <button
+                      className="w-full sm:flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl"
                       onClick={resetForm}
-                      className="flex-1 px-6 py-4 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-semibold rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl"
                     >
                       Create Another Token
                     </button>
                     <button
+                      className="w-full sm:flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-gray-800/50 hover:bg-gray-700/50 text-white font-semibold rounded-2xl transition-all duration-300 border border-gray-700/50"
                       onClick={() => setShowSuccessModal(false)}
-                      className="flex-1 px-6 py-4 bg-gray-800/50 hover:bg-gray-700/50 text-white font-semibold rounded-2xl transition-all duration-300 border border-gray-700/50"
                     >
                       Close
                     </button>
                   </div>
 
-                  <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 p-6 rounded-2xl border border-blue-500/20">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <div className="w-8 h-8 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                        <Award className="w-4 h-4 text-blue-400" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-blue-400">Next Steps</h3>
-                    </div>
-                    <div className="space-y-3 text-sm text-gray-300">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-6 h-6 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <span className="text-purple-400 font-bold text-xs">1</span>
-                        </div>
-                        <p>Your token is now in your wallet and visible on Solana explorers</p>
-                      </div>
-                      {/* <div className="flex items-start space-x-3">
-                      <div className="w-6 h-6 bg-cyan-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <span className="text-cyan-400 font-bold text-xs">2</span>
-                      </div>
-                      <p>Add liquidity on <a href="https://devnet.raydium.io" target="_blank" rel="noopener noreferrer" className="text-cyan-400 underline">Raydium Devnet</a> to test trading</p>
-                    </div> */}
-                      <div className="flex items-start space-x-3">
-                        <div className="w-6 h-6 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <span className="text-green-400 font-bold text-xs">3</span>
-                        </div>
-                        <p>Add liquidity on <a href="https://raydium.io" target="_blank" rel="noopener noreferrer" className="text-green-400 underline">Raydium Mainnet</a> to enable trading</p>
-                      </div>
-                      <div className="flex items-start space-x-3">
-                        <div className="w-6 h-6 bg-orange-500/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                          <span className="text-orange-400 font-bold text-xs">4</span>
-                        </div>
-                        <p>Promote your token on social media and communities to grow adoption</p>
-                      </div>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             )}

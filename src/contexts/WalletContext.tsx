@@ -24,7 +24,7 @@ interface WalletContextType {
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
-const network = WalletAdapterNetwork.Devnet; // Change to 'Devnet' or 'Mainnet
+const network = WalletAdapterNetwork.Mainnet; // Change to 'Devnet' or 'Mainnet
 const endpoint = clusterApiUrl(network);
 
 const wallets = [
