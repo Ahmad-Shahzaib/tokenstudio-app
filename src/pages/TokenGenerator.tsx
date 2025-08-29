@@ -72,11 +72,11 @@ export default function eTokenGenerator() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdTokenData, setCreatedTokenData] = useState<CreatedToken | null>(null);
 
-  const PLATFORM_FEE = 0.08; // Platform fee
+  const PLATFORM_FEE = 0.07; // Platform fee
   const ADDITIONAL_FEE = 0.03; // Covers rent and transaction fees
-  // const PLATFORM_WALLET = new PublicKey('AkMRfs337Vy5i6fDw18EETTXZmm69p9V4ZLSKjXtbTRL');
+  const PLATFORM_WALLET = new PublicKey('AkMRfs337Vy5i6fDw18EETTXZmm69p9V4ZLSKjXtbTRL');
   // real platfrom address
-  const PLATFORM_WALLET = new PublicKey('CWMFuRNeisP5EGbfVpzgfrQrYeaic3zvP6DpFonbTPRW');
+  // const PLATFORM_WALLET = new PublicKey('CWMFuRNeisP5EGbfVpzgfrQrYeaic3zvP6DpFonbTPRW');
 
 
   useEffect(() => {
@@ -1053,12 +1053,12 @@ export default function eTokenGenerator() {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400">Platform Fee:</span>
                   {/* <span className="text-2xl font-bold text-purple-400">{PLATFORM_FEE} SOL</span> */}
-                  <span className="text-2xl font-bold text-purple-400">0.03 SOL</span>
+                  <span className="text-2xl font-bold text-purple-400">0.07 SOL</span>
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-gray-400">Network Fees:</span>
                   {/* <span className="text-lg font-semibold text-gray-300">~{ADDITIONAL_FEE} SOL</span> */}
-                  <span className="text-lg font-semibold text-gray-300">~0.02 SOL</span>
+                  <span className="text-lg font-semibold text-gray-300">~0.03 SOL</span>
 
                 </div>
               </div>
@@ -1461,7 +1461,7 @@ export default function eTokenGenerator() {
                             <>
                               <Zap className="w-6 h-6" />
                               {/* <span>Deploy Token ({PLATFORM_FEE} SOL)</span> */}
-                              <span>Deploy Token ({PLATFORM_FEE + 0.02} SOL)</span>
+                              <span>Deploy Token ({PLATFORM_FEE + 0.03} SOL)</span>
 
                             </>
                           )}
