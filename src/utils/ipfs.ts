@@ -317,7 +317,7 @@ export const uploadImageToIPFS = async (
     if (onProgress) onProgress(95);
 
     // Return IPFS URI instead of gateway URL
-    const ipfsUri = `ipfs://${ipfsHash}`;
+    const ipfsUri = `https://ipfs.io/ipfs/${ipfsHash}`;
 
     // Store image data locally for offline access
     try {
@@ -357,7 +357,7 @@ export const uploadMetadataToIPFS = async (
     const ipfsHash = await uploadJSONToPinata(metadata, 'token-metadata.json');
 
     // Return IPFS URI instead of gateway URL
-    const ipfsUri = `ipfs://${ipfsHash}`;
+    const ipfsUri = `https://ipfs.io/ipfs/${ipfsHash}`;
 
     // Store metadata locally
     try {
