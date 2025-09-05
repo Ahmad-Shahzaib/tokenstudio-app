@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useWalletContext } from '../contexts/WalletContext';
 import SEO from '../components/SEO';
 import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, clusterApiUrl, Keypair } from '@solana/web3.js';
-import {
-  TOKEN_PROGRAM_ID,
-  MINT_SIZE,
-  createInitializeMintInstruction,
-  getAssociatedTokenAddressSync,
-  createAssociatedTokenAccountInstruction,
+import { 
+  TOKEN_PROGRAM_ID, 
+  MINT_SIZE, 
+  createInitializeMintInstruction, 
+  getAssociatedTokenAddressSync, 
+  createAssociatedTokenAccountInstruction, 
   createMintToInstruction,
   getMinimumBalanceForRentExemptMint,
   createSetAuthorityInstruction,
   AuthorityType
 } from '@solana/spl-token';
-import {
+import { 
   createCreateMetadataAccountV3Instruction,
   PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID,
   DataV2
@@ -21,6 +21,8 @@ import {
 import { Coins, CheckCircle, AlertCircle, Loader, Wallet, Copy, ExternalLink, Upload, X, Image, Shield, Zap, Award, ChevronLeft, ChevronRight, Globe, MessageCircle, Twitter, Hash, Cpu, Activity, Layers } from 'lucide-react';
 import { saveCreatedToken, CreatedToken } from '../utils/tokenStorage';
 import { uploadImageToIPFS, uploadMetadataToIPFS, checkIPFSHealth } from '../utils/ipfs';
+import { useWallet } from '@solana/wallet-adapter-react';
+
 
 interface TokenFormData {
   name: string;
@@ -48,7 +50,8 @@ function convertIpfsUri(uri: string): string {
   return uri;
 }
 
-export default function eTokenGenerator() {
+export default function TokenGenerator() {
+  const {signTransaction} = useWallet();
   const { connected, publicKey, sendTransaction } = useWalletContext();
   const [currentStep, setCurrentStep] = useState<FormStep>('basic');
   const [formData, setFormData] = useState<TokenFormData>({
@@ -147,14 +150,15 @@ export default function eTokenGenerator() {
         return !!(formData.name && formData.symbol && formData.supply > 0);
       case 'details':
         return !!formData.imageFile; // Require image upload for details step
-
       default:
         return true;
     }
   };
 
   const nextStep = () => {
-    if (!validateStep(currentStep)) {
+
+if (!validateStep(currentStep)) {
+      setError('Please fill in all required fields');
       if (currentStep === 'details' && !formData.imageFile) {
         setError('Please upload a token logo image before continuing.');
       } else {
@@ -162,6 +166,7 @@ export default function eTokenGenerator() {
       }
       return;
     }
+
     setError('');
     const steps: FormStep[] = ['basic', 'details', 'social', 'review', 'creation'];
     const currentIndex = steps.indexOf(currentStep);
@@ -192,7 +197,8 @@ export default function eTokenGenerator() {
 
     try {
       // const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
-      const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=cf83b40d-47c1-4e6d-ac47-cdf35e878b6d', 'confirmed');
+           const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=cf83b40d-47c1-4e6d-ac47-cdf35e878b6d', 'confirmed');
+
 
       const balance = await connection.getBalance(publicKey);
       const requiredBalance = (PLATFORM_FEE + ADDITIONAL_FEE) * LAMPORTS_PER_SOL;
@@ -264,7 +270,7 @@ export default function eTokenGenerator() {
 
       // Create single transaction for all token operations
       const tokenTransaction = new Transaction();
-
+      
       // Add create account instruction
       tokenTransaction.add(
         SystemProgram.createAccount({
@@ -275,7 +281,7 @@ export default function eTokenGenerator() {
           programId: TOKEN_PROGRAM_ID,
         })
       );
-
+      
       // Add initialize mint instruction (always set authority to publicKey for now)
       tokenTransaction.add(
         createInitializeMintInstruction(
@@ -285,7 +291,7 @@ export default function eTokenGenerator() {
           publicKey  // Always set freeze authority to creator initially
         )
       );
-
+      
       // Add create token account instruction
       tokenTransaction.add(
         createAssociatedTokenAccountInstruction(
@@ -295,7 +301,7 @@ export default function eTokenGenerator() {
           mintAddress
         )
       );
-
+      
       // Add metadata creation if applicable
       if (metadataUri) {
         setTransactionStep('metadata');
@@ -328,7 +334,7 @@ export default function eTokenGenerator() {
           )
         );
       }
-
+      
       // Add mint tokens instruction
       setTransactionStep('minting');
       const mintAmount = formData.supply * Math.pow(10, formData.decimals);
@@ -340,7 +346,7 @@ export default function eTokenGenerator() {
           mintAmount
         )
       );
-
+      
       // Add revoke authority instructions if needed
       setTransactionStep('revoking');
       if (!formData.mintAuthority) {
@@ -353,7 +359,7 @@ export default function eTokenGenerator() {
           )
         );
       }
-
+      
       if (!formData.freezeAuthority) {
         tokenTransaction.add(
           createSetAuthorityInstruction(
@@ -366,17 +372,25 @@ export default function eTokenGenerator() {
       }
 
       // Sign and send the transaction
-      const { blockhash: tokenBlockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('confirmed');
+      const { blockhash: tokenBlockhash, lastValidBlockHeight } = await connection.getLatestBlockhash("confirmed");
       tokenTransaction.recentBlockhash = tokenBlockhash;
       tokenTransaction.feePayer = publicKey;
-      tokenTransaction.partialSign(mintKeypair);
 
-      const tokenSignature = await sendTransaction(tokenTransaction);
-      await connection.confirmTransaction({
-        signature: tokenSignature,
-        blockhash: tokenBlockhash,
-        lastValidBlockHeight
-      }, 'confirmed');
+      const signedTx = await signTransaction!(tokenTransaction);
+      signedTx.partialSign(mintKeypair);
+
+      const tokenSignature = await connection.sendRawTransaction(signedTx.serialize(), {
+        skipPreflight: false,
+        maxRetries: 3,
+      });
+
+      // Confirm with same blockhash & lastValidBlockHeight
+      const conf = await connection.confirmTransaction(
+        { signature: tokenSignature, blockhash: tokenBlockhash, lastValidBlockHeight: lastValidBlockHeight },
+        "confirmed"
+      );
+
+      if (conf.value.err) throw new Error(`Transaction failed: ${JSON.stringify(conf.value.err)}`);
 
       setTransactionSignature(tokenSignature);
 
@@ -425,7 +439,6 @@ export default function eTokenGenerator() {
     setShowSuccessModal(false);
     setCreatedTokenData(null);
   };
-
   const getStepIcon = (step: string) => {
     switch (step) {
       case 'payment': return <Wallet className="w-6 h-6" />;
