@@ -120,7 +120,7 @@ const Navbar: React.FC = () => {
                 Token Creator
               </Link>
 
-              {/* <Link
+              <Link
                 to="/dashboard"
                 className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white 
              hover:after:absolute hover:after:bottom-0 hover:after:left-0 
@@ -128,7 +128,17 @@ const Navbar: React.FC = () => {
              hover:after:bg-gradient-to-r hover:after:from-[#10B981] hover:after:to-[#A3E635]"
               >
                 Dashboard
-              </Link> */}
+              </Link> 
+
+               <Link
+                to="/airdrop"
+                className="relative px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white 
+             hover:after:absolute hover:after:bottom-0 hover:after:left-0 
+             hover:after:w-full hover:after:h-[2px] 
+             hover:after:bg-gradient-to-r hover:after:from-[#10B981] hover:after:to-[#A3E635]"
+              >
+                Airdrop 
+              </Link> 
             </div>
           </div>
 
@@ -290,7 +300,7 @@ const Navbar: React.FC = () => {
             >
               Token Creator
             </Link>
-            {/* <Link
+            <Link
               to="/dashboard"
               className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive('/dashboard')
                 ? 'bg-gradient-to-r from-[#10B981] to-[#A3E635] text-gray-900'
@@ -299,7 +309,18 @@ const Navbar: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Dashboard
-            </Link> */}
+            </Link>
+
+             <Link
+              to="/airdrop"
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${isActive('/airdrop')
+                ? 'bg-gradient-to-r from-[#10B981] to-[#A3E635] text-gray-900'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Airdrop
+            </Link>
           </div>
 
           {connected && (

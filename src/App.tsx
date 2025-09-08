@@ -5,6 +5,9 @@ import Navbar from './components/Navbar';
 import TokenGenerator from './pages/TokenGenerator';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
+import Dashboard from './pages/Dashboard';
+import AirdropPage from './pages/Airdrop';
+
 // import Footer from './components/Footer';
 
 // Add Error Boundary component
@@ -51,9 +54,8 @@ function App() {
             <Routes>
               <Route path="/create" element={<TokenGenerator />} />
               <Route path="/" element={<About />} />
-
-
-              {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/airdrop" element={<AirdropPage />} />
               <Route path="*" element={<NotFound />} />
 
             </Routes>
