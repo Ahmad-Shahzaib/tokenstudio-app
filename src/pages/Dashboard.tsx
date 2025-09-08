@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
 
   const loadTokens = () => {
     if (!publicKey) return;
-    
+
     setLoading(true);
     try {
       const userTokens = getTokensByCreator(publicKey.toString());
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
     const totalTokens = tokens.length;
     const totalSupply = tokens.reduce((sum, token) => sum + token.supply, 0);
     const totalTransactions = tokens.length;
-    
+
     return {
       totalTokens,
       totalSupply,
@@ -120,7 +120,7 @@ const Dashboard: React.FC = () => {
               Manage your tokens and track your portfolio performance.
             </p>
           </div>
-          
+
           <div className="flex items-center space-x-4 mt-4 lg:mt-0">
             <div className="flex items-center space-x-2 bg-slate-800/40 py-2 px-4 rounded-lg border border-slate-700/30">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -217,7 +217,7 @@ const Dashboard: React.FC = () => {
                   <h3 className="text-lg font-semibold text-white mb-2">Create Token</h3>
                   <p className="text-gray-400 text-sm text-center">Generate a new token on the Solana blockchain</p>
                 </a>
-                
+
                 <div className="flex flex-col items-center justify-center p-6 bg-slate-700/20 border border-slate-700/30 rounded-xl">
                   <div className="w-12 h-12 bg-slate-600 rounded-lg flex items-center justify-center mb-4">
                     <TrendingUp className="w-6 h-6 text-gray-400" />
@@ -225,15 +225,15 @@ const Dashboard: React.FC = () => {
                   <h3 className="text-lg font-semibold text-white mb-2">Analytics</h3>
                   <p className="text-gray-400 text-sm text-center">Track your token performance (Coming Soon)</p>
                 </div>
-                
+
                 <div className="flex flex-col items-center justify-center p-6 bg-slate-700/20 border border-slate-700/30 rounded-xl">
-                 <a
-                  href="/airdrop">
-                  <div className="w-12 h-12 bg-gradient-to-r from-lime-400 to-green-500 text-black font-bold rounded-lg flex items-center justify-center mb-4">
-                    <Wallet className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">Airdrop</h3>
-                  <p className="text-gray-400 text-sm text-center">Distribute tokens to multiple wallets </p>
+                  <a
+                    href="/airdrop">
+                    <div className="w-12 h-12 bg-gradient-to-r from-lime-400 to-green-500 text-black font-bold rounded-lg flex items-center justify-center mb-4">
+                      <Wallet className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Airdrop</h3>
+                    <p className="text-gray-400 text-sm text-center">Distribute tokens to multiple wallets </p>
                   </a>
                 </div>
               </div>
@@ -247,7 +247,7 @@ const Dashboard: React.FC = () => {
                   View All <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
-              
+
               {tokens.length > 0 ? (
                 <div className="space-y-4">
                   {tokens.slice(0, 3).map((token) => (
@@ -306,7 +306,7 @@ const Dashboard: React.FC = () => {
                   You haven't created any tokens yet. Start by generating your first token on the Solana blockchain.
                 </p>
                 <a
-                  href="/generate"
+                  href="/create"
                   className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white font-semibold rounded-xl transition-all transform hover:scale-105 shadow-lg"
                 >
                   <Plus className="w-5 h-5" />
@@ -317,7 +317,7 @@ const Dashboard: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {tokens.map((token) => {
                   const tokenImage = getTokenImage(token);
-                  
+
                   return (
                     <div
                       key={token.mintAddress}
@@ -339,12 +339,12 @@ const Dashboard: React.FC = () => {
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                        
+
                         {/* Token symbol badge */}
                         <div className="absolute top-4 left-4 bg-slate-900/80 text-white py-1 px-3 rounded-full text-xs font-medium backdrop-blur-sm">
                           {token.symbol}
                         </div>
-                        
+
                         {/* Delete button */}
                         <button
                           onClick={() => handleDeleteToken(token.mintAddress)}
@@ -353,7 +353,7 @@ const Dashboard: React.FC = () => {
                         >
                           <Trash2 className="w-4 h-4 text-red-400" />
                         </button>
-                        
+
                         {/* Token name */}
                         <div className="absolute bottom-4 left-4">
                           <h3 className="text-xl font-bold text-white">{token.name}</h3>
@@ -367,7 +367,7 @@ const Dashboard: React.FC = () => {
                         {token.description && (
                           <p className="text-gray-300 text-sm mb-4 line-clamp-2">{token.description}</p>
                         )}
-                        
+
                         {/* Stats */}
                         <div className="grid grid-cols-2 gap-4 mb-4">
                           <div className="bg-slate-700/20 p-3 rounded-lg">
@@ -379,7 +379,7 @@ const Dashboard: React.FC = () => {
                             <p className="text-white font-semibold">{token.decimals}</p>
                           </div>
                         </div>
-                        
+
                         {/* Mint Address */}
                         <div className="mb-4">
                           <p className="text-gray-400 text-xs mb-2">Mint Address</p>
@@ -410,7 +410,7 @@ const Dashboard: React.FC = () => {
                             <span className="text-green-400 text-xs mt-1">Copied to clipboard!</span>
                           )}
                         </div>
-                        
+
                         {/* Transaction Signature */}
                         <div>
                           <p className="text-gray-400 text-xs mb-2">Transaction</p>

@@ -38,7 +38,7 @@ const LandingPage: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <Link
-              to="/generate"
+              to="/create"
               className="group bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white px-10 py-5 rounded-2xl text-lg font-semibold transition-all transform hover:scale-105 flex items-center space-x-3 shadow-2xl hover:shadow-purple-500/25"
             >
               <span>Launch Your Token</span>
@@ -329,7 +329,7 @@ const LandingPage: React.FC = () => {
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Link
-                to="/generate"
+                to="/create"
                 className="group bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-white px-12 py-6 rounded-2xl text-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center space-x-3 shadow-2xl hover:shadow-purple-500/25"
               >
                 <span>Start Building Now</span>
