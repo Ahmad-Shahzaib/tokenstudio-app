@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useWalletContext } from '../contexts/WalletContext';
 import SEO from '../components/SEO';
 import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL, clusterApiUrl, Keypair } from '@solana/web3.js';
-import { 
-  TOKEN_PROGRAM_ID, 
-  MINT_SIZE, 
-  createInitializeMintInstruction, 
-  getAssociatedTokenAddressSync, 
-  createAssociatedTokenAccountInstruction, 
+import {
+  TOKEN_PROGRAM_ID,
+  MINT_SIZE,
+  createInitializeMintInstruction,
+  getAssociatedTokenAddressSync,
+  createAssociatedTokenAccountInstruction,
   createMintToInstruction,
   getMinimumBalanceForRentExemptMint,
   createSetAuthorityInstruction,
   AuthorityType
 } from '@solana/spl-token';
-import { 
+import {
   createCreateMetadataAccountV3Instruction,
   PROGRAM_ID as TOKEN_METADATA_PROGRAM_ID,
   DataV2
@@ -51,7 +51,7 @@ function convertIpfsUri(uri: string): string {
 }
 
 export default function TokenGenerator() {
-  const {signTransaction} = useWallet();
+  const { signTransaction } = useWallet();
   const { connected, publicKey, sendTransaction } = useWalletContext();
   const [currentStep, setCurrentStep] = useState<FormStep>('basic');
   const [formData, setFormData] = useState<TokenFormData>({
@@ -75,7 +75,7 @@ export default function TokenGenerator() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [createdTokenData, setCreatedTokenData] = useState<CreatedToken | null>(null);
 
-  const PLATFORM_FEE = 0.07; // Platform fee
+  const PLATFORM_FEE = 0.03; // Platform fee
   const ADDITIONAL_FEE = 0.03; // Covers rent and transaction fees
   // const PLATFORM_WALLET = new PublicKey('AkMRfs337Vy5i6fDw18EETTXZmm69p9V4ZLSKjXtbTRL');
   // real platfrom address
@@ -157,7 +157,7 @@ export default function TokenGenerator() {
 
   const nextStep = () => {
 
-if (!validateStep(currentStep)) {
+    if (!validateStep(currentStep)) {
       setError('Please fill in all required fields');
       if (currentStep === 'details' && !formData.imageFile) {
         setError('Please upload a token logo image before continuing.');
@@ -197,7 +197,7 @@ if (!validateStep(currentStep)) {
 
     try {
       // const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
-           const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=cf83b40d-47c1-4e6d-ac47-cdf35e878b6d', 'confirmed');
+      const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=cf83b40d-47c1-4e6d-ac47-cdf35e878b6d', 'confirmed');
 
 
       const balance = await connection.getBalance(publicKey);
@@ -270,7 +270,7 @@ if (!validateStep(currentStep)) {
 
       // Create single transaction for all token operations
       const tokenTransaction = new Transaction();
-      
+
       // Add create account instruction
       tokenTransaction.add(
         SystemProgram.createAccount({
@@ -281,7 +281,7 @@ if (!validateStep(currentStep)) {
           programId: TOKEN_PROGRAM_ID,
         })
       );
-      
+
       // Add initialize mint instruction (always set authority to publicKey for now)
       tokenTransaction.add(
         createInitializeMintInstruction(
@@ -291,7 +291,7 @@ if (!validateStep(currentStep)) {
           publicKey  // Always set freeze authority to creator initially
         )
       );
-      
+
       // Add create token account instruction
       tokenTransaction.add(
         createAssociatedTokenAccountInstruction(
@@ -301,7 +301,7 @@ if (!validateStep(currentStep)) {
           mintAddress
         )
       );
-      
+
       // Add metadata creation if applicable
       if (metadataUri) {
         setTransactionStep('metadata');
@@ -334,7 +334,7 @@ if (!validateStep(currentStep)) {
           )
         );
       }
-      
+
       // Add mint tokens instruction
       setTransactionStep('minting');
       const mintAmount = formData.supply * Math.pow(10, formData.decimals);
@@ -346,7 +346,7 @@ if (!validateStep(currentStep)) {
           mintAmount
         )
       );
-      
+
       // Add revoke authority instructions if needed
       setTransactionStep('revoking');
       if (!formData.mintAuthority) {
@@ -359,7 +359,7 @@ if (!validateStep(currentStep)) {
           )
         );
       }
-      
+
       if (!formData.freezeAuthority) {
         tokenTransaction.add(
           createSetAuthorityInstruction(
@@ -1103,7 +1103,7 @@ if (!validateStep(currentStep)) {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400">Platform Fee:</span>
-                  <span className="text-2xl font-bold text-purple-400">0.07 SOL</span>
+                  <span className="text-2xl font-bold text-purple-400">0.06 SOL</span>
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-gray-400">Estimated Gas:</span>

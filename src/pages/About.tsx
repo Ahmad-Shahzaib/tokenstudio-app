@@ -27,7 +27,7 @@ const About: React.FC = () => {
 
   const stats = [
     { value: "1,247", label: "Tokens Created", suffix: "+" },
-    { value: "0.1", label: "SOL to Start", suffix: "" },
+    { value: "0.06", label: "SOL to Start", suffix: "" },
     { value: "99.9", label: "Uptime", suffix: "%" },
     { value: "24/7", label: "Support", suffix: "" }
   ];
@@ -178,7 +178,7 @@ const About: React.FC = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
               <div className="text-center">
-                <div className="text-4xl font-bold text-lime-400">0.1</div>
+                <div className="text-4xl font-bold text-lime-400">0.06</div>
                 <div className="text-gray-400">SOL to start</div>
               </div>
               <div className="text-center">
