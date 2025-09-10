@@ -1103,7 +1103,7 @@ export default function TokenGenerator() {
                 </p>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400">Platform Fee:</span>
-                  <span className="text-2xl font-bold text-purple-400">0.06 SOL</span>
+                  <span className="text-2xl font-bold text-purple-400">0.03 SOL</span>
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <span className="text-gray-400">Estimated Gas:</span>
